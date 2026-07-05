@@ -1,0 +1,92 @@
+package com.github.duskbyte.managers.network;
+
+import com.github.duskbyte.events.bus.EventBus;
+import com.github.duskbyte.events.bus.EventHandler;
+import com.github.duskbyte.events.impl.WorldEvent;
+import com.github.duskbyte.utils.player.ChatUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.*;
+
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class ClientboundPacketManager {
+
+    public static final ClientboundPacketManager INSTANCE = new ClientboundPacketManager();
+
+    private ClientboundPacketManager() {
+        EventBus.INSTANCE.subscribe(this);
+    }
+
+    private final LinkedBlockingQueue<Packet> packets = new LinkedBlockingQueue<>();
+
+    private boolean tracking = false;
+    private boolean shouldFlush = false;
+
+    @EventHandler
+    private void onWorldChange(WorldEvent event) {
+        shouldFlush = true;
+        tracking = false;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void flush() {
+        while (!packets.isEmpty()) {
+            try {
+                packets.poll().handle(Minecraft.getInstance().getConnection().getConnection().getPacketListener());
+            } catch (Exception e) {
+                ChatUtils.addChatMessage("Failed to flush clientbound packets: " + e.getMessage());
+            }
+        }
+    }
+
+    public boolean isDisallowedPacket(Packet<?> packet) {
+        return !(packet instanceof ClientboundSystemChatPacket)
+                && !(packet instanceof ClientboundPlayerChatPacket)
+                && !(packet instanceof ClientboundSetDisplayObjectivePacket)
+                && !(packet instanceof ClientboundSetEquipmentPacket)
+                && !(packet instanceof ClientboundClearTitlesPacket)
+                && !(packet instanceof ClientboundSetTitleTextPacket)
+                && !(packet instanceof ClientboundSetSubtitleTextPacket)
+                && !(packet instanceof ClientboundSetActionBarTextPacket)
+                && !(packet instanceof ClientboundBossEventPacket)
+                && !(packet instanceof ClientboundAddEntityPacket)
+                && !(packet instanceof ClientboundRemoveEntitiesPacket)
+                && !(packet instanceof ClientboundDamageEventPacket)
+                && !(packet instanceof ClientboundSoundPacket)
+                && !(packet instanceof ClientboundSoundEntityPacket)
+                && !(packet instanceof ClientboundSetEntityDataPacket)
+                && !(packet instanceof ClientboundSetHealthPacket)
+                && !(packet instanceof ClientboundContainerSetContentPacket)
+                && !(packet instanceof ClientboundContainerSetSlotPacket)
+                && !(packet instanceof ClientboundSetObjectivePacket)
+                && !(packet instanceof ClientboundResetScorePacket)
+                && !(packet instanceof ClientboundSetScorePacket);
+    }
+
+    public void startTracking() {
+        tracking = true;
+    }
+
+    public void stopTracking() {
+        tracking = false;
+    }
+
+    public boolean onPacketReceive(Packet<?> packet) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.level == null) return false;
+
+        if (shouldFlush) {
+            flush();
+            shouldFlush = false;
+            return false;
+        }
+
+        if (!isDisallowedPacket(packet) && tracking) {
+            packets.add(packet);
+            return true;
+        }
+        return false;
+    }
+
+}

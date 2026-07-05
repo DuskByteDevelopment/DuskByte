@@ -1,0 +1,46 @@
+package com.github.duskbyte.modules.impl.render;
+
+import com.github.duskbyte.events.bus.EventHandler;
+import com.github.duskbyte.events.impl.TickEvent;
+import com.github.duskbyte.modules.Category;
+import com.github.duskbyte.modules.Module;
+import com.github.duskbyte.settings.impl.EnumSetting;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+
+public class Fullbright extends Module {
+
+    public static final Fullbright INSTANCE = new Fullbright();
+
+    private Fullbright() {
+        super("Fullbright", Category.RENDER);
+    }
+
+    private enum Mode {
+        Gamma,
+        Potion
+    }
+
+    private final EnumSetting<Mode> mode = enumSetting("Mode", Mode.Gamma, v -> {
+        if (v == Mode.Gamma && mc.player != null) {
+            mc.player.removeEffect(MobEffects.NIGHT_VISION);
+        }
+    });
+
+    public boolean isGammaMode() {
+        return isEnabled() && mode.is(Mode.Gamma);
+    }
+
+    @Override
+    protected void onDisable() {
+        if (nullCheck() || mode.is(Mode.Gamma)) return;
+        mc.player.removeEffect(MobEffects.NIGHT_VISION);
+    }
+
+    @EventHandler
+    private void onTick(TickEvent.Pre event) {
+        if (nullCheck() || mode.is(Mode.Gamma)) return;
+        mc.player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 0));
+    }
+
+}

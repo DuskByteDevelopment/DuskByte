@@ -1,0 +1,20 @@
+package com.github.duskbyte.utils.network;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.protocol.Packet;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class PacketUtils {
+
+    private static final Minecraft mc = Minecraft.getInstance();
+
+    public static final Set<Packet<?>> bypassedPackets = new HashSet<>();
+
+    public static void sendSilently(Packet<?> packet) {
+        bypassedPackets.add(packet);
+        mc.getConnection().send(packet);
+    }
+
+}

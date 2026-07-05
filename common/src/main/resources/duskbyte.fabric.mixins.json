@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.github.duskbyte.fabric.mixins",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
+

@@ -1,0 +1,27 @@
+{
+  "enable": {
+    "sounds": [
+      "duskbyte:enable"
+    ]
+  },
+  "disable": {
+    "sounds": [
+      "duskbyte:disable"
+    ]
+  },
+  "settings_open": {
+    "sounds": [
+      "duskbyte:settings-open"
+    ]
+  },
+  "settings_close": {
+    "sounds": [
+      "duskbyte:settings-close"
+    ]
+  },
+  "shutdown": {
+    "sounds": [
+      "duskbyte:shutdown"
+    ]
+  }
+}

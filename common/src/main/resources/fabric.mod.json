@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "DuskByte",
+  "description": "Ciallo～(∠・ω )⌒☆ 码需慢慢编，心急则出bug",
+  "authors": [
+    "Zhouyi2013"
+  ],
+  "contact": {
+  },
+  "entrypoints": {
+    "client": [
+      "com.github.duskbyte.DuskFabric"
+    ],
+    "duskbyte:addon": [
+      "com.github.duskbyte.addon.BuiltinAddonHook"
+    ]
+  },
+  "license": "MIT",
+  "environment": "*",
+  "mixins": [
+      "${mod_id}.mixins.json"
+  ],
+  "accessWidener": "duskbyte.accesswidener",
+  "depends": {
+      "fabricloader": ">=${fabric_loader_version}",
+      "fabric-api": "*",
+      "minecraft": "~${minecraft_version}",
+      "java": ">=${java_version}"
+  }
+}
