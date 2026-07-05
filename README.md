@@ -7,30 +7,26 @@
 </h4>
 
 <p align="center">
-  <a href="https://github.com/NekoyaHouse/DuskByte/actions"><img alt="Build" src="https://img.shields.io/badge/build-gradle-4c1?style=flat-square"></a>
+  <a href="https://github.com/DuskByteDevelopment/DuskByte/actions"><img alt="Build" src="https://img.shields.io/badge/build-gradle-4c1?style=flat-square"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square"></a>
-  <img alt="Loaders" src="https://img.shields.io/badge/loaders-NeoForge%20%26%20Fabric-6a5acd?style=flat-square">
-  <a href="https://discord.gg/vYbaae3X7e"><img alt="Discord" src="https://img.shields.io/badge/Discord-Join%20Server-5865F2?style=flat-square&logo=discord&logoColor=white"></a>
+  <img alt="Minecraft" src="https://img.shields.io/badge/minecraft-1.20.5+-orange?style=flat-square">
 </p>
 
 ## 📌 Overview
-A modern multi loader Minecraft utility client built on NeoForge & Fabric with advanced rendering system and modular architecture.
+DuskByte is a modern Minecraft utility client built on Fabric with a focus on Crystal PvP and an advanced rendering system. Features a modular architecture with extensive customization options.
 
-## 🚀 Addon System
-[DuskByte Addon Template](https://github.com/NekoyaHouse/DuskByte-Addon-Template)
+## ✨ Features
+- **Combat Modules** — KillAura, CrystalAura, AutoTotem, Surround, Criticals, Hitboxes, TriggerBot, AutoWeapon, and more
+- **Movement Modules** — ElytraFly, Velocity, NoSlow, Phase, Scaffold, Spider, AirJump, and more
+- **Player Modules** — AntiAFK, AutoEat, AutoFish, AutoTool, ChatSuffix, InvManager, and more
+- **Render Modules** — ESP, Tracers, NameTags, Chams, Breadcrumbs, Zoom, Fullbright, NoRender, and more
+- **Misc Modules** — Timer, AntiSpam, AutoReconnect
+- **Custom GUI** — Material Design 3 themed panel UI with full Chinese localization
+- **Lumin Graphics System** — Custom rendering pipeline with TTF font support, blur effects, and shader backgrounds
 
-[Addon Development Guide](docs/addon-development.md)
-
-## 🎨 Graphics System
-
-The Lumin rendering system provides custom render pipelines for:
-- Rectangles & Round Rectangles
-- Shadows & Blur effects
-- TTF Font rendering
-- Texture rendering
-- Custom vertex formats
-
-See [Lumin Graphics README](src/main/java/com/github/duskbyte/graphics/README.md) for details.
+## 🖥️ Main Menu Backgrounds
+- Black Hole / Minecraft Blocks / Planet / Nebula / Cyber Fuji
+- Powered by GLSL shaders (Shadertoy-compatible)
 
 ## ⚙️ Build & Run
 
@@ -52,4 +48,4 @@ This project is distributed under a multi-license model:
 
 ---
 
-Copyright © 2026 NekoyaHouse.
+Copyright © 2026 DuskByteDevelopment.

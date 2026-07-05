@@ -7,30 +7,38 @@
 </h4>
 
 <p align="center">
-  <a href="https://github.com/NekoyaHouse/DuskByte/actions"><img alt="构建" src="https://img.shields.io/badge/build-gradle-4c1?style=flat-square"></a>
+  <a href="https://github.com/DuskByteDevelopment/DuskByte/actions"><img alt="构建" src="https://img.shields.io/badge/build-gradle-4c1?style=flat-square"></a>
   <a href="LICENSE"><img alt="许可证" src="https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square"></a>
-  <img alt="加载器" src="https://img.shields.io/badge/loaders-NeoForge%20%26%20Fabric-6a5acd?style=flat-square">
-  <a href="https://discord.gg/vYbaae3X7e"><img alt="Discord" src="https://img.shields.io/badge/Discord-加入社区-5865F2?style=flat-square&logo=discord&logoColor=white"></a>
+  <img alt="Minecraft" src="https://img.shields.io/badge/minecraft-1.20.5+-orange?style=flat-square">
 </p>
 
 ## 📌 项目简介
-基于 NeoForge & Fabric 构建的多加载器现代化 Minecraft 辅助客户端，拥有先进的渲染系统和模块化架构。
+DuskByte 是一款基于 Fabric 的现代化 Minecraft 辅助客户端，专注于 Crystal PvP 并拥有先进的渲染系统。模块化架构，提供丰富的自定义选项。
 
-## 🚀 插件系统
-[DuskByte 插件模板](https://github.com/NekoyaHouse/DuskByte-Addon-Template)
+## ✨ 功能模块
 
-[Addon 开发文档](docs/addon-development.md)
+### ⚔️ Combat（战斗）
+KillAura、CrystalAura、AutoTotem、Surround、Criticals（暴击）、Hitboxes（碰撞箱）、TriggerBot（自动攻击）、AutoWeapon（自动武器）、PacketMine（数据包挖掘）、MaceAura（重锤光环）等
 
-## 🎨 渲染系统
+### 🏃 Movement（移动）
+ElytraFly（鞘翅飞行）、Velocity（反击退）、NoSlow（无减速）、Phase（穿墙）、Scaffold（自动搭路）、Spider（爬墙）、AirJump（空中跳跃）、Step（自动上台阶）等
 
-Lumin 渲染系统提供自定义渲染管线，支持：
-- 矩形与圆角矩形
-- 阴影与模糊效果
-- TTF 字体渲染
-- 纹理渲染
-- 自定义顶点格式
+### 🎮 Player（玩家）
+AntiAFK（防离线）、AutoEat（自动进食）、AutoFish（自动钓鱼）、AutoTool（自动工具）、ChatSuffix（聊天后缀）、InvManager（背包管理）、FakePlayer（假人）等
 
-详见 [渲染系统文档](src/main/java/com/github/duskbyte/graphics/README_zh.md)
+### 🎨 Render（渲染）
+ESP（透视）、Tracers（追踪线）、NameTags（名字标签）、Chams、Breadcrumbs（足迹）、Zoom（缩放）、Fullbright（全亮）、NoRender（移除渲染）、Hat（帽子）等
+
+### 🔧 Misc（其他）
+Timer（变速）、AntiSpam（防刷屏）、AutoReconnect（自动重连）
+
+## 🖥️ 主菜单背景
+- 黑洞 / Minecraft 世界 / 行星 / 星云 / 赛博富士山
+- 由 GLSL 着色器驱动（兼容 Shadertoy 格式）
+
+## 🌐 多语言支持
+- 简体中文（完整汉化）
+- English
 
 ## ⚙️ 构建与运行
 
@@ -52,4 +60,4 @@ Lumin 渲染系统提供自定义渲染管线，支持：
 
 ---
 
-版权所有 © 2026 NekoyaHouse.
+版权所有 © 2026 DuskByteDevelopment.
