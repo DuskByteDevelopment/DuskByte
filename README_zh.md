@@ -1,3 +1,6 @@
+<p align="center"><img width="700" align="center" height="163" alt="image" src="https://github.com/user-attachments/assets/5e0c8cc3-45f5-4e88-a04a-b15db7b94e80" /></p>
+
+
 <h1 align="center">DuskByte</h1>
 <h4 align="center">
     <p>
