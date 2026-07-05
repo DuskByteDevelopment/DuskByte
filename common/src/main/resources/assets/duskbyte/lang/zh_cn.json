@@ -851,6 +851,9 @@
   "duskbyte.modules.anti spam.hide duplicates": "去重",
 
   "duskbyte.modules.timer": "变速",
+  "duskbyte.modules.timer.mode": "模式",
+  "duskbyte.modules.timer.mode.vanilla": "原版",
+  "duskbyte.modules.timer.mode.strict": "严格",
   "duskbyte.modules.timer.speed": "速度",
 
   "duskbyte.modules.auto reconnect": "自动重连",
@@ -867,6 +870,7 @@
   "duskbyte.modules.tracers.target": "目标",
   "duskbyte.modules.tracers.target.players": "玩家",
   "duskbyte.modules.tracers.target.all": "全部",
+  "duskbyte.modules.tracers.color": "颜色",
   "duskbyte.modules.tracers.line width": "线条宽度",
 
   "duskbyte.categories.misc": "其他",

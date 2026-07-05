@@ -1,10 +1,11 @@
 package com.github.duskbyte.modules.impl.render;
 
+import com.github.duskbyte.events.bus.EventHandler;
+import com.github.duskbyte.events.impl.TickEvent;
 import com.github.duskbyte.modules.Category;
 import com.github.duskbyte.modules.Module;
 import com.github.duskbyte.settings.impl.DoubleSetting;
 import com.github.duskbyte.settings.impl.IntSetting;
-import net.minecraft.client.Minecraft;
 
 public class Zoom extends Module {
 
@@ -22,6 +23,18 @@ public class Zoom extends Module {
     @Override
     protected void onDisable() {
         currentFov = 0;
+    }
+
+    @EventHandler
+    private void onTick(TickEvent.Pre event) {
+        if (nullCheck()) return;
+
+        // Update FOV every tick for smooth animation
+        if (currentFov > 0) {
+            double originalFov = mc.options.fov().get();
+            double target = originalFov / zoomFactor.getValue();
+            currentFov += (target - currentFov) * (smoothSpeed.getValue() / 10.0);
+        }
     }
 
     public double getFov(double originalFov) {

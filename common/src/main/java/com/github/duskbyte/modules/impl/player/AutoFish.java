@@ -18,6 +18,7 @@ public class AutoFish extends Module {
     private final IntSetting castDelay = intSetting("Cast Delay", 5, 0, 20, 1);
 
     private int delay;
+    private boolean wasMoving = false;
 
     private AutoFish() {
         super("Auto Fish", Category.PLAYER);
@@ -26,6 +27,7 @@ public class AutoFish extends Module {
     @Override
     protected void onDisable() {
         delay = 0;
+        wasMoving = false;
     }
 
     @EventHandler
@@ -49,9 +51,16 @@ public class AutoFish extends Module {
             return;
         }
 
-        // Check if the bobber has a bite by checking if it's moving
-        if (hook.getDeltaMovement().lengthSqr() < 0.001 && !hook.isUnderWater()) {
-            // Potential bite detected
+        // Detect bite: bobber stops moving suddenly (was moving -> now still)
+        double speed = hook.getDeltaMovement().lengthSqr();
+        boolean isMoving = speed > 0.001;
+
+        if (wasMoving && !isMoving && hook.isUnderWater()) {
+            // Bite detected! Reel in
+            mc.gameMode.useItem(mc.player, InteractionHand.MAIN_HAND);
+            delay = castDelay.getValue();
         }
+
+        wasMoving = isMoving;
     }
 }
