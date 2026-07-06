@@ -24,7 +24,6 @@ import com.github.duskbyte.modules.impl.render.*;
 import com.github.duskbyte.modules.impl.hud.*;
 import com.github.duskbyte.modules.impl.hud.notification.NotificationsHud;
 import com.github.duskbyte.modules.impl.movement.*;
-import com.github.duskbyte.modules.impl.player.*;
 import com.github.duskbyte.modules.impl.render.*;
 import com.github.duskbyte.utils.client.ClientUtils;
 import com.github.duskbyte.utils.client.KeybindUtils;
@@ -54,6 +53,7 @@ public class ModuleManager {
 
                 // Combat
                 AntiBot.INSTANCE,
+                AutoCity.INSTANCE,
                 AutoClicker.INSTANCE,
                 AutoDtap.INSTANCE,
                 AutoHitCrystal.INSTANCE,
@@ -83,7 +83,11 @@ public class ModuleManager {
                 AutoFirework.INSTANCE,
                 AutoFish.INSTANCE,
                 AutoKouZi.INSTANCE,
+                AutoPlaceBlock.INSTANCE,
+                AutoRefreshTrade.INSTANCE,
+                AutoTorch.INSTANCE,
                 AutoTool.INSTANCE,
+                AutoTree.INSTANCE,
                 BreakCooldown.INSTANCE,
                 ChatSuffix.INSTANCE,
                 Disabler.INSTANCE,

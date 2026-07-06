@@ -814,5 +814,42 @@
   "duskbyte.modules.anti afk.rotate": "Rotate",
   "duskbyte.modules.anti afk.jump": "Jump",
   "duskbyte.modules.anti afk.sneak": "Sneak",
-  "duskbyte.modules.anti afk.interval": "Interval"
+  "duskbyte.modules.anti afk.interval": "Interval",
+
+  "duskbyte.modules.auto torch": "Auto Torch",
+  "duskbyte.modules.auto torch.light level": "Light Level",
+  "duskbyte.modules.auto torch.range": "Range",
+  "duskbyte.modules.auto torch.delay": "Delay",
+  "duskbyte.modules.auto torch.only dark": "Only Dark",
+  "duskbyte.modules.auto torch.place on sides": "Place On Sides",
+
+  "duskbyte.modules.auto tree": "Auto Tree",
+  "duskbyte.modules.auto tree.range": "Range",
+  "duskbyte.modules.auto tree.delay": "Delay",
+  "duskbyte.modules.auto tree.check light": "Check Light",
+  "duskbyte.modules.auto tree.auto switch": "Auto Switch",
+
+  "duskbyte.modules.auto city": "Auto City",
+  "duskbyte.modules.auto city.range": "Range",
+  "duskbyte.modules.auto city.delay": "Delay",
+  "duskbyte.modules.auto city.rotate": "Rotate",
+  "duskbyte.modules.auto city.packet": "Packet",
+  "duskbyte.modules.auto city.city self": "City Self",
+
+  "duskbyte.modules.auto place block": "Auto Place Block",
+  "duskbyte.modules.auto place block.place mode": "Place Mode",
+  "duskbyte.modules.auto place block.place mode.lookingat": "Looking At",
+  "duskbyte.modules.auto place block.place mode.feet": "Feet",
+  "duskbyte.modules.auto place block.place mode.above": "Above",
+  "duskbyte.modules.auto place block.place range": "Place Range",
+  "duskbyte.modules.auto place block.delay": "Delay",
+  "duskbyte.modules.auto place block.auto switch": "Auto Switch",
+  "duskbyte.modules.auto place block.rotate": "Rotate",
+  "duskbyte.modules.auto place block.swing hand": "Swing Hand",
+
+  "duskbyte.modules.auto refresh trade": "Auto Refresh Trade",
+  "duskbyte.modules.auto refresh trade.range": "Range",
+  "duskbyte.modules.auto refresh trade.delay": "Delay",
+  "duskbyte.modules.auto refresh trade.only librarian": "Only Librarian",
+  "duskbyte.modules.auto refresh trade.need enchanted book": "Need Enchanted Book"
 }
