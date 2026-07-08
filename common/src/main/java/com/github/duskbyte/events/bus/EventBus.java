@@ -7,6 +7,8 @@ import com.github.duskbyte.events.bus.listeners.LambdaListener;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -16,7 +18,7 @@ public class EventBus {
 
     public static final EventBus INSTANCE = new EventBus();
 
-    private final Map<Object, List<IListener>> listenerCache = new ConcurrentHashMap<>();
+    private final Map<Object, List<IListener>> listenerCache = new IdentityHashMap<>();
     private final Map<Class<?>, List<IListener>> staticListenerCache = new ConcurrentHashMap<>();
 
     private final Map<Class<?>, List<IListener>> listenerMap = new ConcurrentHashMap<>();
@@ -145,16 +147,7 @@ public class EventBus {
 
         if (object == null) return staticListenerCache.computeIfAbsent(klass, func);
 
-        // We need to check if the instances are the same and avoid using .equals() and .hashCode()
-        for (Object key : listenerCache.keySet()) {
-            if (key == object) {
-                return listenerCache.get(object);
-            }
-        }
-
-        List<IListener> listeners = func.apply(object);
-        listenerCache.put(object, listeners);
-        return listeners;
+        return listenerCache.computeIfAbsent(object, func);
     }
 
     private void getListeners(List<IListener> listeners, Class<?> klass, Object object) {

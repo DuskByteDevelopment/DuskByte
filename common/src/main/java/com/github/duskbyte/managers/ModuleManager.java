@@ -23,8 +23,6 @@ import com.github.duskbyte.modules.impl.player.*;
 import com.github.duskbyte.modules.impl.render.*;
 import com.github.duskbyte.modules.impl.hud.*;
 import com.github.duskbyte.modules.impl.hud.notification.NotificationsHud;
-import com.github.duskbyte.modules.impl.movement.*;
-import com.github.duskbyte.modules.impl.render.*;
 import com.github.duskbyte.utils.client.ClientUtils;
 import com.github.duskbyte.utils.client.KeybindUtils;
 import com.github.duskbyte.utils.player.ChatUtils;

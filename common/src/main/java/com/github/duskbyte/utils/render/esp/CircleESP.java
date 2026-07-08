@@ -13,7 +13,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 
 import java.awt.*;
 import java.util.function.Function;
@@ -76,12 +75,18 @@ public class CircleESP {
         BufferBuilder triBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
         Matrix4f matrix = poseStack.last().pose();
 
+        float sinTicks = (float) -Math.sin(ticks + 1) / 2.7f;
+        float sr = sideColor.getAlpha() / 255.0f;
+        float sg = sideColor.getGreen() / 255.0f;
+        float sb = sideColor.getBlue() / 255.0f;
+        float sideAlpha = 0.52f * alpha;
+
         for (float i = 0; i <= (Math.PI * 2); i += ((float) Math.PI * 2) / 64.F) {
             float vecX = (float) (radius * Math.cos(i));
             float vecZ = (float) (radius * Math.sin(i));
 
-            triBuffer.addVertex(matrix, vecX, (float) (-Math.sin(ticks + 1) / 2.7f), vecZ).setColor(sideColor.getAlpha() / 255.0f, sideColor.getGreen() / 255.0f, sideColor.getBlue() / 255.0f, 0.0f);
-            triBuffer.addVertex(matrix, vecX, 0, vecZ).setColor(sideColor.getAlpha() / 255.0f, sideColor.getGreen() / 255.0f, sideColor.getBlue() / 255.0f, 0.52f * alpha);
+            triBuffer.addVertex(matrix, vecX, sinTicks, vecZ).setColor(sr, sg, sb, 0.0f);
+            triBuffer.addVertex(matrix, vecX, 0, vecZ).setColor(sr, sg, sb, sideAlpha);
         }
 
         TRIANGLE_STRIP.apply(canSee ? TRIANGLE_STRIP_PIPELINE : TRIANGLE_STRIP_NO_DEPTH_PIPELINE).draw(triBuffer.buildOrThrow());
@@ -89,29 +94,29 @@ public class CircleESP {
         BufferBuilder lineBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH);
         PoseStack.Pose entry = poseStack.last();
 
+        float lr = lineColor.getRed() / 255.0f;
+        float lg = lineColor.getGreen() / 255.0f;
+        float lb = lineColor.getBlue() / 255.0f;
+        float la = Math.round(lineColor.getAlpha() * alpha) / 255.0f;
+
         for (int i = 0; i <= 180; i++) {
             float radAngle = (float) (i * Math.PI * 2 / 90);
             float nextAngle = (float) ((i + 1) * Math.PI * 2 / 90);
 
-            Vector2f nextPoint = getPoint(nextAngle, radius);
-            Vector2f linePoint = getPoint(radAngle, radius);
-            Vector2f normal = getNormal(radAngle);
+            float x1 = (float) (-Math.sin(radAngle) * radius);
+            float z1 = (float) (Math.cos(radAngle) * radius);
+            float x2 = (float) (-Math.sin(nextAngle) * radius);
+            float z2 = (float) (Math.cos(nextAngle) * radius);
+            float nx = (float) -Math.cos(radAngle);
+            float nz = (float) -Math.sin(radAngle);
 
-            lineBuffer.addVertex(entry, linePoint.x, 0f, linePoint.y).setColor(lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), Math.round(lineColor.getAlpha() * alpha)).setNormal(entry, normal.x, 0f, normal.y).setLineWidth(2f);
-            lineBuffer.addVertex(entry, nextPoint.x, 0f, nextPoint.y).setColor(lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), Math.round(lineColor.getAlpha() * alpha)).setNormal(entry, normal.x, 0f, normal.y).setLineWidth(2f);
+            lineBuffer.addVertex(entry, x1, 0f, z1).setColor(lr, lg, lb, la).setNormal(entry, nx, 0f, nz).setLineWidth(2f);
+            lineBuffer.addVertex(entry, x2, 0f, z2).setColor(lr, lg, lb, la).setNormal(entry, nx, 0f, nz).setLineWidth(2f);
         }
 
         CIRCLE_LINES.apply(canSee ? CIRCLE_LINES_PIPELINE : CIRCLE_LINES_NO_DEPTH_PIPELINE).draw(lineBuffer.buildOrThrow());
 
         poseStack.popPose();
-    }
-
-    private static Vector2f getPoint(float radAngle, float radius) {
-        return new Vector2f((float) (-Math.sin(radAngle) * radius), (float) (Math.cos(radAngle) * radius));
-    }
-
-    private static Vector2f getNormal(float radAngle) {
-        return new Vector2f((float) -Math.cos(radAngle), (float) -Math.sin(radAngle));
     }
 
 }

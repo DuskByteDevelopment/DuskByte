@@ -18,6 +18,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector2f;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class RotationUtils {
 
     private static final Minecraft mc = Minecraft.getInstance();
@@ -244,11 +246,12 @@ public class RotationUtils {
     }
 
     public static Vector2f applySensitivityPatch(final Vector2f rotation) {
-        final Vector2f previousRotation = new Vector2f(mc.player.yRotO, mc.player.xRotO);
+        final float prevYaw = mc.player.yRotO;
+        final float prevPitch = mc.player.xRotO;
         final float mouseSensitivity = (float) (mc.options.sensitivity().get() * (1 + Math.random() / 10000000) * 0.6F + 0.2F);
         final double multiplier = mouseSensitivity * mouseSensitivity * mouseSensitivity * 8.0F * 0.15D;
-        final float yaw = previousRotation.x + (float) (Math.round((rotation.x - previousRotation.x) / multiplier) * multiplier);
-        final float pitch = previousRotation.y + (float) (Math.round((rotation.y - previousRotation.y) / multiplier) * multiplier);
+        final float yaw = prevYaw + (float) (Math.round((rotation.x - prevYaw) / multiplier) * multiplier);
+        final float pitch = prevPitch + (float) (Math.round((rotation.y - prevPitch) / multiplier) * multiplier);
         return new Vector2f(yaw, Mth.clamp(pitch, -90, 90));
     }
 
@@ -261,8 +264,8 @@ public class RotationUtils {
     }
 
     public static Vector2f relateToPlayerRotation(final Vector2f rotation) {
-        final Vector2f previousRotation = new Vector2f(mc.player.yRotO, mc.player.xRotO);
-        final float yaw = previousRotation.x + Mth.wrapDegrees(rotation.x - previousRotation.x);
+        final float prevYaw = mc.player.yRotO;
+        final float yaw = prevYaw + Mth.wrapDegrees(rotation.x - prevYaw);
         final float pitch = Mth.clamp(rotation.y, -90, 90);
         return new Vector2f(yaw, pitch);
     }
@@ -324,19 +327,33 @@ public class RotationUtils {
 
             for (int i = 0; i < iterations; i++) {
                 if (motion > 0.0001f) {
-                    yaw += (float) MathUtils.getRandom(-0.0006, 0.0006);
-                    pitch += (float) MathUtils.getRandom(-0.0035, 0.0035);
+                    yaw += (float) (ThreadLocalRandom.current().nextDouble(-0.0006, 0.0006));
+                    pitch += (float) (ThreadLocalRandom.current().nextDouble(-0.0035, 0.0035));
                 }
 
-                final Vector2f rotations = new Vector2f(yaw, pitch);
-                final Vector2f fixedRotations = applySensitivityPatch(rotations);
+                final float fixedYaw = applySensitivityYaw(yaw, lastYaw);
+                final float fixedPitch = Mth.clamp(applySensitivityPitch(pitch, lastPitch), -90, 90);
 
-                yaw = shortestYaw(lastYaw, fixedRotations.x);
-                pitch = Math.max(-90, Math.min(90, fixedRotations.y));
+                yaw = shortestYaw(lastYaw, fixedYaw);
+                pitch = fixedPitch;
             }
         }
 
         return new Vector2f(yaw, pitch);
+    }
+
+    /** Inlined applySensitivityPatch: compute yaw component without creating a Vector2f. */
+    private static float applySensitivityYaw(final float rotationYaw, final float prevYaw) {
+        final float mouseSensitivity = (float) (mc.options.sensitivity().get() * (1 + Math.random() / 10000000) * 0.6F + 0.2F);
+        final double multiplier = mouseSensitivity * mouseSensitivity * mouseSensitivity * 8.0F * 0.15D;
+        return prevYaw + (float) (Math.round((rotationYaw - prevYaw) / multiplier) * multiplier);
+    }
+
+    /** Inlined applySensitivityPatch: compute pitch component without creating a Vector2f. */
+    private static float applySensitivityPitch(final float rotationPitch, final float prevPitch) {
+        final float mouseSensitivity = (float) (mc.options.sensitivity().get() * (1 + Math.random() / 10000000) * 0.6F + 0.2F);
+        final double multiplier = mouseSensitivity * mouseSensitivity * mouseSensitivity * 8.0F * 0.15D;
+        return prevPitch + (float) (Math.round((rotationPitch - prevPitch) / multiplier) * multiplier);
     }
 
     private static float shortestYaw(float from, float to) {

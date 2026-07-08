@@ -31,4 +31,10 @@ repo
 # AI
 .vscode
 .trae
+atomcode-*.exe
 致敬源码库
+
+# generated junk
+hs_err_*.log
+replay_*.log
+*.zip
