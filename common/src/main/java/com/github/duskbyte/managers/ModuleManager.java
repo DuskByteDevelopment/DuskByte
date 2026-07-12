@@ -74,6 +74,11 @@ public class ModuleManager {
                 SpearKill.INSTANCE,
                 Surround.INSTANCE,
                 TriggerBot.INSTANCE,
+                KeepSprint.INSTANCE,
+                AutoHead.INSTANCE,
+                FastBow.INSTANCE,
+                SuperKnockback.INSTANCE,
+                TargetStrafe.INSTANCE,
 
                 // Player
                 AntiAFK.INSTANCE,
@@ -99,12 +104,19 @@ public class ModuleManager {
                 PacketEat.INSTANCE,
                 Stealer.INSTANCE,
                 UseCooldown.INSTANCE,
+                AntiVoid.INSTANCE,
+                AutoArmor.INSTANCE,
+                ChestStealer.INSTANCE,
+                FastPlace.INSTANCE,
+                SpeedMine.INSTANCE,
+                Freecam.INSTANCE,
 
                 // Movement
                 AirJump.INSTANCE,
                 AutoSprint.INSTANCE,
                 Blink.INSTANCE,
                 ElytraFly.INSTANCE,
+                Flight.INSTANCE,
                 FastWeb.INSTANCE,
                 MovementFix.INSTANCE,
                 NoFall.INSTANCE,
@@ -116,6 +128,10 @@ public class ModuleManager {
                 Stuck.INSTANCE,
                 VClip.INSTANCE,
                 Velocity.INSTANCE,
+                InventoryMove.INSTANCE,
+                Jesus.INSTANCE,
+                Speed.INSTANCE,
+                FastLadder.INSTANCE,
 
                 // Render
                 AspectRatio.INSTANCE,
@@ -133,6 +149,13 @@ public class ModuleManager {
                 Filter.INSTANCE,
                 Tracers.INSTANCE,
                 Zoom.INSTANCE,
+                NoHurtCam.INSTANCE,
+                Keystrokes.INSTANCE,
+                XRay.INSTANCE,
+                Radar.INSTANCE,
+                ItemPhysics.INSTANCE,
+                Hitmarkers.INSTANCE,
+                Animations.INSTANCE,
 
                 // Hud
                 NotificationsHud.INSTANCE,
@@ -253,3 +276,4 @@ public class ModuleManager {
     }
 
 }
+

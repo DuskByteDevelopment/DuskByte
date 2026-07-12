@@ -10,6 +10,7 @@ public enum Category {
     MOVEMENT("@", "movement"),
     RENDER("a", "render"),
     HUD("E", "hud"),
+    EXPLOIT("c", "exploit"),
     MISC("!", "misc");
 
     public final String icon;
@@ -32,3 +33,4 @@ public enum Category {
     }
 
 }
+

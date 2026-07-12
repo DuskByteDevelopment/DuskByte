@@ -7,7 +7,7 @@ import com.github.duskbyte.graphics.renderers.RectRenderer;
 import com.github.duskbyte.graphics.renderers.RoundRectRenderer;
 import com.github.duskbyte.graphics.renderers.ShadowRenderer;
 import com.github.duskbyte.graphics.renderers.TextRenderer;
-import com.github.duskbyte.gui.panel.MD3Theme;
+import com.github.duskbyte.gui.panel.CyberpunkTheme;
 import com.github.duskbyte.gui.panel.PanelLayout;
 import com.github.duskbyte.gui.panel.PanelState;
 import com.github.duskbyte.gui.panel.adapter.ModuleViewModel;
@@ -30,11 +30,9 @@ import java.util.*;
 import java.util.List;
 
 /**
- * 模块列表面板。
- * <p>
- * 负责渲染分类下的模块列表、搜索框、滚动视口与模块行缓存，
- * 并维护与列表内容相关的输入状态、滚动状态和重建签名。
- */
+ * 妯″潡鍒楄〃闈㈡澘銆? * <p>
+ * 璐熻矗娓叉煋鍒嗙被涓嬬殑妯″潡鍒楄〃銆佹悳绱㈡銆佹粴鍔ㄨ鍙ｄ笌妯″潡琛岀紦瀛橈紝
+ * 骞剁淮鎶や笌鍒楄〃鍐呭鐩稿叧鐨勮緭鍏ョ姸鎬併€佹粴鍔ㄧ姸鎬佸拰閲嶅缓绛惧悕銆? */
 public class ModuleListPanel {
 
     protected final PanelState state;
@@ -75,18 +73,15 @@ public class ModuleListPanel {
     }
 
     /**
-     * 提取并编译模块列表面板当前帧的 UI。
-     * <p>
-     * 面板标题与搜索框会直接写入主批次；滚动列表内容则写入独立的 viewport 缓冲，
-     * 并在之后的统一 flush 阶段输出。
-     */
+     * 鎻愬彇骞剁紪璇戞ā鍧楀垪琛ㄩ潰鏉垮綋鍓嶅抚鐨?UI銆?     * <p>
+     * 闈㈡澘鏍囬涓庢悳绱㈡浼氱洿鎺ュ啓鍏ヤ富鎵规锛涙粴鍔ㄥ垪琛ㄥ唴瀹瑰垯鍐欏叆鐙珛鐨?viewport 缂撳啿锛?     * 骞跺湪涔嬪悗鐨勭粺涓€ flush 闃舵杈撳嚭銆?     */
     public void render(GuiGraphicsExtractor GuiGraphicsExtractor, PanelLayout.Rect bounds, int mouseX, int mouseY, float partialTick) {
         this.bounds = bounds;
         this.guiHeight = GuiGraphicsExtractor.guiHeight();
 
         PanelLayout.Rect viewport = getViewport();
         List<Module> modules = state.getVisibleModules();
-        float contentHeight = modules.size() * (ModuleRow.HEIGHT + MD3Theme.ROW_GAP);
+        float contentHeight = modules.size() * (ModuleRow.HEIGHT + CyberpunkTheme.ROW_GAP);
         state.setMaxModuleScroll(contentHeight - viewport.height());
         float maxModuleScroll = Math.max(0, contentHeight - viewport.height());
         boolean hasScrollBar = maxModuleScroll > 0;
@@ -101,8 +96,8 @@ public class ModuleListPanel {
         }
 
         PanelUiTree tree = PanelUiTree.build(scope -> {
-            scope.text(state.getSelectedCategory().getName(), bounds.x() + MD3Theme.PANEL_TITLE_INSET, bounds.y() + 10.0f, 0.78f, MD3Theme.TEXT_PRIMARY);
-            scope.text(modulesComponent.getTranslatedName(), bounds.x() + MD3Theme.PANEL_TITLE_INSET, bounds.y() + 21.0f, 0.56f, MD3Theme.TEXT_SECONDARY);
+            scope.text(state.getSelectedCategory().getName(), bounds.x() + CyberpunkTheme.PANEL_TITLE_INSET, bounds.y() + 10.0f, 0.78f, CyberpunkTheme.TEXT_PRIMARY);
+            scope.text(modulesComponent.getTranslatedName(), bounds.x() + CyberpunkTheme.PANEL_TITLE_INSET, bounds.y() + 21.0f, 0.56f, CyberpunkTheme.TEXT_SECONDARY);
             buildSearchField(scope, mouseX, mouseY);
             scope.viewport(contentBuffer, viewport, guiHeight, state.getModuleScroll(), maxModuleScroll, contentHeight, content -> {
                 if (!rebuildContent) {
@@ -127,7 +122,7 @@ public class ModuleListPanel {
                             || !toggleHoverAnimation.isFinished()
                             || marqueeActive);
                     row.buildUi(content, textRenderer, hoverAnimation.getValue(), selectionAnimation.getValue(), toggleAnimation.getValue(), toggleHoverAnimation.getValue());
-                    y += ModuleRow.HEIGHT + MD3Theme.ROW_GAP;
+                    y += ModuleRow.HEIGHT + CyberpunkTheme.ROW_GAP;
                 }
             });
         });
@@ -136,34 +131,36 @@ public class ModuleListPanel {
         if (rebuildContent) {
             rememberSnapshot(bounds, mouseX, mouseY, modules, GuiGraphicsExtractor.guiHeight(), contentSignature);
         }
+
+        // 清理不再显示的模块的动画缓存，防止内存泄漏
+        Set<Module> moduleSet = new HashSet<>(modules);
+        hoverAnimations.keySet().retainAll(moduleSet);
+        selectionAnimations.keySet().retainAll(moduleSet);
+        toggleAnimations.keySet().retainAll(moduleSet);
+        toggleHoverAnimations.keySet().retainAll(moduleSet);
     }
 
     /**
-     * 输出并清空列表视口缓冲中的内容。
-     */
+     * 杈撳嚭骞舵竻绌哄垪琛ㄨ鍙ｇ紦鍐蹭腑鐨勫唴瀹广€?     */
     public void flushContent() {
         contentBuffer.flush();
     }
 
     /**
-     * 将列表内容标记为脏，以便在下次渲染时触发重建。
-     */
+     * 灏嗗垪琛ㄥ唴瀹规爣璁颁负鑴忥紝浠ヤ究鍦ㄤ笅娆℃覆鏌撴椂瑙﹀彂閲嶅缓銆?     */
     public void markDirty() {
         contentState.markDirty();
     }
 
     /**
-     * 返回列表内容是否仍包含未结束的动画。
-     */
+     * 杩斿洖鍒楄〃鍐呭鏄惁浠嶅寘鍚湭缁撴潫鐨勫姩鐢汇€?     */
     public boolean hasActiveAnimations() {
         return contentState.hasActiveAnimations();
     }
 
     /**
-     * 处理列表区域中的点击事件。
-     * <p>
-     * 该方法会优先处理滚动条拖拽，其次处理搜索框聚焦，最后处理模块行选择与启用切换。
-     */
+     * 澶勭悊鍒楄〃鍖哄煙涓殑鐐瑰嚮浜嬩欢銆?     * <p>
+     * 璇ユ柟娉曚細浼樺厛澶勭悊婊氬姩鏉℃嫋鎷斤紝鍏舵澶勭悊鎼滅储妗嗚仛鐒︼紝鏈€鍚庡鐞嗘ā鍧楄閫夋嫨涓庡惎鐢ㄥ垏鎹€?     */
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         if (bounds == null || event.button() != 0) {
             return false;
@@ -225,8 +222,7 @@ public class ModuleListPanel {
     }
 
     /**
-     * 当鼠标位于列表视口内时，处理滚轮滚动。
-     */
+     * 褰撻紶鏍囦綅浜庡垪琛ㄨ鍙ｅ唴鏃讹紝澶勭悊婊氳疆婊氬姩銆?     */
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         PanelLayout.Rect viewport = getViewport();
         if (bounds != null && viewport.contains(mouseX, mouseY)) {
@@ -238,8 +234,7 @@ public class ModuleListPanel {
     }
 
     /**
-     * 处理搜索框处于焦点状态时的键盘事件。
-     */
+     * 澶勭悊鎼滅储妗嗗浜庣劍鐐圭姸鎬佹椂鐨勯敭鐩樹簨浠躲€?     */
     public boolean keyPressed(KeyEvent event) {
         if (!searchFocused) {
             return false;
@@ -282,8 +277,7 @@ public class ModuleListPanel {
     }
 
     /**
-     * 处理搜索框的字符输入。
-     */
+     * 澶勭悊鎼滅储妗嗙殑瀛楃杈撳叆銆?     */
     public boolean charTyped(CharacterEvent event) {
         if (!searchFocused || !event.isAllowedChatCharacter()) {
             return false;
@@ -297,10 +291,8 @@ public class ModuleListPanel {
     }
 
     /**
-     * 处理来自面板外层的全局点击通知。
-     * <p>
-     * 若点击位置不在搜索框内，则会取消搜索框焦点。
-     */
+     * 澶勭悊鏉ヨ嚜闈㈡澘澶栧眰鐨勫叏灞€鐐瑰嚮閫氱煡銆?     * <p>
+     * 鑻ョ偣鍑讳綅缃笉鍦ㄦ悳绱㈡鍐咃紝鍒欎細鍙栨秷鎼滅储妗嗙劍鐐广€?     */
     public void handleGlobalClick(double mouseX, double mouseY) {
         if (bounds == null) {
             return;
@@ -366,11 +358,11 @@ public class ModuleListPanel {
     }
 
     private PanelLayout.Rect getViewport() {
-        return new PanelLayout.Rect(bounds.x() + MD3Theme.PANEL_VIEWPORT_INSET, bounds.y() + 34.0f, bounds.width() - MD3Theme.PANEL_VIEWPORT_INSET * 2.0f, bounds.height() - 40.0f);
+        return new PanelLayout.Rect(bounds.x() + CyberpunkTheme.PANEL_VIEWPORT_INSET, bounds.y() + 34.0f, bounds.width() - CyberpunkTheme.PANEL_VIEWPORT_INSET * 2.0f, bounds.height() - 40.0f);
     }
 
     private PanelLayout.Rect getSearchBounds() {
-        return new PanelLayout.Rect(bounds.right() - MD3Theme.PANEL_TITLE_INSET - 76.0f, bounds.y() + 8.0f, 76.0f, 18.0f);
+        return new PanelLayout.Rect(bounds.right() - CyberpunkTheme.PANEL_TITLE_INSET - 76.0f, bounds.y() + 8.0f, 76.0f, 18.0f);
     }
 
     private void buildSearchField(PanelUiTree.Scope scope, int mouseX, int mouseY) {
@@ -384,12 +376,22 @@ public class ModuleListPanel {
         String display = showPlaceholder ? searchComponent.getTranslatedName() : query;
         float scale = 0.52f;
         Color textColor = showPlaceholder
-                ? MD3Theme.lerp(MD3Theme.TEXT_MUTED, MD3Theme.filledFieldContent(searchFocused), focusProgress)
-                : MD3Theme.filledFieldContent(searchFocused);
+                ? CyberpunkTheme.lerp(CyberpunkTheme.TEXT_MUTED, CyberpunkTheme.filledFieldContent(searchFocused), focusProgress)
+                : CyberpunkTheme.filledFieldContent(searchFocused);
         scope.input(searchBounds, searchFocused, fieldHover,
                 8.0f, display, scale, textColor,
-                searchFocused ? searchCursorIndex : null, searchFocused ? MD3Theme.filledFieldCaret(true) : null,
+                searchFocused ? searchCursorIndex : null, searchFocused ? CyberpunkTheme.filledFieldCaret(true) : null,
                 null, 0.0f, null);
+
+        // Clear search button (X) when query is not empty
+        if (!query.isEmpty()) {
+            float clearSize = 12.0f;
+            float clearX = searchBounds.right() - clearSize - 4.0f;
+            float clearY = searchBounds.y() + (searchBounds.height() - clearSize) / 2.0f;
+            boolean clearHovered = mouseX >= clearX && mouseX <= clearX + clearSize && mouseY >= clearY && mouseY <= clearY + clearSize;
+            Color clearColor = clearHovered ? CyberpunkTheme.TEXT_PRIMARY : CyberpunkTheme.TEXT_MUTED;
+            scope.text("✕", clearX, clearY, 0.5f, clearColor);
+        }
 
         if (searchFocused) {
             float textY = searchBounds.y() + (searchBounds.height() - textRenderer.getHeight(scale)) / 2.0f - 1.0f;
@@ -399,3 +401,4 @@ public class ModuleListPanel {
         }
     }
 }
+
