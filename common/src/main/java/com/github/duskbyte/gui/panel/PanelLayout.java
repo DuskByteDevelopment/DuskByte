@@ -6,27 +6,29 @@ public class PanelLayout {
     }
 
     public static Layout compute(int screenWidth, int screenHeight, float railWidth) {
-        float panelWidth = Math.min(screenWidth * 0.75f, screenWidth - 20f);
-        float panelHeight = Math.min(screenHeight * 0.75f, screenHeight - 20f);
-        panelWidth = Math.max(panelWidth, 400.0f);
-        panelHeight = Math.max(panelHeight, 260.0f);
+        // Tenacity 风格：固定比例居中面板，更紧凑
+        float panelWidth = Math.min(screenWidth * TenacityTheme.PANEL_WIDTH_RATIO, screenWidth - 20f);
+        float panelHeight = Math.min(screenHeight * TenacityTheme.PANEL_HEIGHT_RATIO, screenHeight - 20f);
+        panelWidth = Math.max(panelWidth, 450.0f);
+        panelHeight = Math.max(panelHeight, 300.0f);
 
         float x = (screenWidth - panelWidth) / 2.0f;
         float y = (screenHeight - panelHeight) / 2.0f;
 
-        float gap = MD3Theme.SECTION_GAP;
-        float columnHeight = panelHeight - MD3Theme.OUTER_PADDING * 2.0f;
-        float railX = x + MD3Theme.OUTER_PADDING;
+        float gap = TenacityTheme.SECTION_GAP;
+        float columnHeight = panelHeight - TenacityTheme.OUTER_PADDING * 2.0f;
+        float railX = x + TenacityTheme.OUTER_PADDING;
         float modulesX = railX + railWidth + gap;
-        float maxContentRight = x + panelWidth - MD3Theme.OUTER_PADDING;
-        float moduleWidth = Math.min(200.0f, panelWidth * 0.30f);
+        float maxContentRight = x + panelWidth - TenacityTheme.OUTER_PADDING;
+        // Tenacity 风格：模块区更宽，设置区更窄
+        float moduleWidth = Math.min(280.0f, panelWidth * 0.50f);
         float detailX = modulesX + moduleWidth + gap;
         float detailWidth = maxContentRight - detailX;
 
         Rect panel = new Rect(x, y, panelWidth, panelHeight);
-        Rect rail = new Rect(railX, y + MD3Theme.OUTER_PADDING, railWidth, columnHeight);
-        Rect modules = new Rect(modulesX, y + MD3Theme.OUTER_PADDING, moduleWidth, columnHeight);
-        Rect detail = new Rect(detailX, y + MD3Theme.OUTER_PADDING, detailWidth, columnHeight);
+        Rect rail = new Rect(railX, y + TenacityTheme.OUTER_PADDING, railWidth, columnHeight);
+        Rect modules = new Rect(modulesX, y + TenacityTheme.OUTER_PADDING, moduleWidth, columnHeight);
+        Rect detail = new Rect(detailX, y + TenacityTheme.OUTER_PADDING, detailWidth, columnHeight);
 
         return new Layout(panel, rail, modules, detail);
     }

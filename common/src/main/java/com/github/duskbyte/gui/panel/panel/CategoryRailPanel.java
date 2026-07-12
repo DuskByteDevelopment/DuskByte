@@ -7,7 +7,7 @@ import com.github.duskbyte.graphics.renderers.RectRenderer;
 import com.github.duskbyte.graphics.renderers.RoundRectRenderer;
 import com.github.duskbyte.graphics.renderers.TextRenderer;
 import com.github.duskbyte.graphics.text.StaticFontLoader;
-import com.github.duskbyte.gui.panel.MD3Theme;
+import com.github.duskbyte.gui.panel.TenacityTheme;
 import com.github.duskbyte.gui.panel.PanelLayout;
 import com.github.duskbyte.gui.panel.PanelState;
 import com.github.duskbyte.gui.panel.dsl.PanelUiCompiler;
@@ -58,7 +58,7 @@ public class CategoryRailPanel {
         this.rectRenderer = rectRenderer;
         this.roundRectRenderer = roundRectRenderer;
         this.textRenderer = textRenderer;
-        this.expandAnimation.setStartValue(MD3Theme.RAIL_COLLAPSED_WIDTH);
+        this.expandAnimation.setStartValue(TenacityTheme.RAIL_COLLAPSED_WIDTH);
         this.contentAnimation.setStartValue(0.0f);
         this.menuHoverAnimation.setStartValue(0.0f);
         this.headerTitleAnimation.setStartValue(0.0f);
@@ -72,7 +72,7 @@ public class CategoryRailPanel {
     }
 
     public float getAnimatedWidth() {
-        expandAnimation.run(state.isSidebarExpanded() ? MD3Theme.RAIL_EXPANDED_WIDTH : MD3Theme.RAIL_COLLAPSED_WIDTH);
+        expandAnimation.run(state.isSidebarExpanded() ? TenacityTheme.RAIL_EXPANDED_WIDTH : TenacityTheme.RAIL_COLLAPSED_WIDTH);
         return expandAnimation.getValue();
     }
 
@@ -93,7 +93,7 @@ public class CategoryRailPanel {
             PanelLayout.Rect menuButton = getMenuButtonBounds();
             float menuHover = scope.animate(menuHoverAnimation, mouseOver(menuButton, mouseX, mouseY));
             scope.roundRect(menuButton.x(), menuButton.y(), menuButton.width(), menuButton.height(), 12.0f,
-                    MD3Theme.lerp(MD3Theme.withAlpha(MD3Theme.SURFACE_CONTAINER, 0), MD3Theme.SURFACE_CONTAINER_HIGH, menuHover));
+                    TenacityTheme.lerp(TenacityTheme.withAlpha(TenacityTheme.SURFACE_CONTAINER_LOW, 0), TenacityTheme.withAlpha(TenacityTheme.PRIMARY, 22), menuHover));
             buildMenuGlyph(scope, menuButton);
 
             float categoryStartY = getCategoryStartY(bounds);
@@ -104,9 +104,9 @@ public class CategoryRailPanel {
                 float subtitleY = titleY + titleHeight + pad;
                 float titleOffset = (1.0f - titleProgress) * 8.0f;
                 float subtitleOffset = (1.0f - subtitleProgress) * 10.0f;
-                scope.text("DuskByte", bounds.x() + 38.0f + titleOffset, titleY, titleScale, MD3Theme.withAlpha(MD3Theme.TEXT_PRIMARY, (int) (255 * titleProgress)));
+                scope.text("DuskByte", bounds.x() + 38.0f + titleOffset, titleY, titleScale, TenacityTheme.withAlpha(TenacityTheme.TEXT_PRIMARY, (int) (255 * titleProgress)));
                 if (subtitleProgress > 0.02f) {
-                    scope.text(DuskByte.VERSION, bounds.x() + 38.0f + subtitleOffset, subtitleY, subtitleScale, MD3Theme.withAlpha(MD3Theme.TEXT_SECONDARY, (int) (210 * subtitleProgress)));
+                    scope.text(DuskByte.VERSION, bounds.x() + 38.0f + subtitleOffset, subtitleY, subtitleScale, TenacityTheme.withAlpha(TenacityTheme.TEXT_SECONDARY, (int) (210 * subtitleProgress)));
                 }
                 if (dividerProgress > 0.02f) {
                     float dividerY = subtitleY + clippedTextRenderer.getHeight(subtitleScale) + 4.0f;
@@ -114,8 +114,8 @@ public class CategoryRailPanel {
                     float dividerTargetWidth = bounds.width() - 14.0f;
                     float dividerWidth = dividerTargetWidth * dividerProgress;
                     float dividerX = dividerBaseX + (1.0f - dividerProgress) * 6.0f;
-                    scope.rect(dividerX, dividerY, dividerWidth, 1.0f, MD3Theme.withAlpha(MD3Theme.OUTLINE_SOFT, (int) (120 * dividerProgress)));
-                    scope.rect(dividerX, dividerY, Math.min(18.0f, dividerWidth), 1.0f, MD3Theme.withAlpha(MD3Theme.TEXT_SECONDARY, (int) (52 * dividerProgress)));
+                    scope.rect(dividerX, dividerY, dividerWidth, 1.0f, TenacityTheme.withAlpha(TenacityTheme.OUTLINE_SOFT, (int) (120 * dividerProgress)));
+                    scope.rect(dividerX, dividerY, Math.min(18.0f, dividerWidth), 1.0f, TenacityTheme.withAlpha(TenacityTheme.TEXT_SECONDARY, (int) (52 * dividerProgress)));
                 }
             }
 
@@ -155,13 +155,14 @@ public class CategoryRailPanel {
                 scope.animate(hoverYAnimation, hoveredY);
             }
             if (hoverAlpha > 0.01f) {
-                scope.roundRect(bounds.x() + 5.0f, hoverYAnimation.getValue(), bounds.width() - 10.0f, CATEGORY_ITEM_HEIGHT, MD3Theme.CARD_RADIUS,
-                        MD3Theme.withAlpha(MD3Theme.SURFACE_CONTAINER_HIGH, (int) (200 * hoverAlpha)));
+                scope.roundRect(bounds.x() + 5.0f, hoverYAnimation.getValue(), bounds.width() - 10.0f, CATEGORY_ITEM_HEIGHT, TenacityTheme.CARD_RADIUS,
+                        TenacityTheme.withAlpha(TenacityTheme.SURFACE_CONTAINER_HIGH, (int) (200 * hoverAlpha)));
             }
 
             float animatedSelectionY = scope.animate(selectionYAnimation, selectedItemY);
             float animatedSelectionHeight = scope.animate(selectionHeightAnimation, CATEGORY_ITEM_HEIGHT);
-            scope.roundRect(bounds.x() + 5.0f, animatedSelectionY, bounds.width() - 10.0f, animatedSelectionHeight, MD3Theme.CARD_RADIUS, MD3Theme.SECONDARY_CONTAINER);
+            scope.roundRect(bounds.x() + 5.0f, animatedSelectionY, bounds.width() - 10.0f, animatedSelectionHeight, TenacityTheme.CARD_RADIUS, TenacityTheme.withAlpha(TenacityTheme.SECONDARY_CONTAINER, 220));
+            scope.rect(bounds.x() + 5.0f, animatedSelectionY + 2.0f, 3.0f, animatedSelectionHeight - 4.0f, TenacityTheme.PRIMARY);
 
             float itemY = categoryStartY;
             for (Category category : Category.values()) {
@@ -258,7 +259,7 @@ public class CategoryRailPanel {
     }
 
     private void buildMenuGlyph(PanelUiTree.Scope scope, PanelLayout.Rect button) {
-        Color lineColor = MD3Theme.TEXT_PRIMARY;
+        Color lineColor = TenacityTheme.TEXT_PRIMARY;
         float glyphWidth = 12.0f;
         float glyphHeight = 10.0f;
         float x = getRailIconCenterX(button) - glyphWidth / 2.0f;
@@ -271,11 +272,11 @@ public class CategoryRailPanel {
     private void buildCategoryItem(PanelUiTree.Scope scope, PanelLayout.Rect menuButton, PanelLayout.Rect itemRect, Category category, int count,
                                    boolean hovered, boolean selected, float contentProgress,
                                    float itemIconScale, float itemLabelScale, float itemCountScale) {
-        Color background = selected ? MD3Theme.withAlpha(MD3Theme.SECONDARY_CONTAINER, 0)
-                : (hovered ? MD3Theme.SURFACE_CONTAINER : MD3Theme.withAlpha(MD3Theme.SURFACE_CONTAINER, 0));
-        Color iconColor = selected ? MD3Theme.ON_SECONDARY_CONTAINER : (hovered ? MD3Theme.TEXT_PRIMARY : MD3Theme.TEXT_SECONDARY);
-        Color labelColor = selected ? MD3Theme.ON_SECONDARY_CONTAINER : MD3Theme.TEXT_PRIMARY;
-        Color countColor = selected ? MD3Theme.ON_SECONDARY_CONTAINER : MD3Theme.TEXT_SECONDARY;
+        Color background = selected ? TenacityTheme.withAlpha(TenacityTheme.SECONDARY_CONTAINER, 0)
+                : (hovered ? TenacityTheme.SURFACE_CONTAINER : TenacityTheme.withAlpha(TenacityTheme.SURFACE_CONTAINER, 0));
+        Color iconColor = selected ? TenacityTheme.ON_SECONDARY_CONTAINER : (hovered ? TenacityTheme.TEXT_PRIMARY : TenacityTheme.TEXT_SECONDARY);
+        Color labelColor = selected ? TenacityTheme.ON_SECONDARY_CONTAINER : TenacityTheme.TEXT_PRIMARY;
+        Color countColor = selected ? TenacityTheme.ON_SECONDARY_CONTAINER : TenacityTheme.TEXT_SECONDARY;
         float iconHeight = clippedTextRenderer.getHeight(itemIconScale, StaticFontLoader.ICONS);
         float labelHeight = clippedTextRenderer.getHeight(itemLabelScale);
         float countHeight = clippedTextRenderer.getHeight(itemCountScale);
@@ -283,14 +284,17 @@ public class CategoryRailPanel {
         float labelY = itemRect.y() + (itemRect.height() - labelHeight) / 2.0f - 1.0f;
         float countY = itemRect.y() + (itemRect.height() - countHeight) / 2.0f - 1.0f;
 
-        scope.roundRect(itemRect.x(), itemRect.y(), itemRect.width(), itemRect.height(), MD3Theme.CARD_RADIUS, background);
+        scope.roundRect(itemRect.x(), itemRect.y(), itemRect.width(), itemRect.height(), TenacityTheme.CARD_RADIUS, background);
+        if (selected) {
+            scope.rect(itemRect.x() + 1.5f, itemRect.y() + 3.0f, 2.0f, itemRect.height() - 6.0f, TenacityTheme.PRIMARY);
+        }
         float iconWidth = clippedTextRenderer.getWidth(category.icon, itemIconScale, StaticFontLoader.ICONS);
         float iconX = getRailIconCenterX(menuButton) - iconWidth / 2.0f;
         scope.text(category.icon, iconX, iconY, itemIconScale, iconColor, StaticFontLoader.ICONS);
         if (contentProgress > 0.02f) {
             float textOffset = (1.0f - contentProgress) * 5.0f;
-            Color animatedLabel = MD3Theme.withAlpha(labelColor, (int) (255 * contentProgress));
-            Color animatedCount = MD3Theme.withAlpha(countColor, (int) (220 * contentProgress));
+            Color animatedLabel = TenacityTheme.withAlpha(labelColor, (int) (255 * contentProgress));
+            Color animatedCount = TenacityTheme.withAlpha(countColor, (int) (220 * contentProgress));
             scope.text(category.getName(), itemRect.x() + 30.0f + textOffset, labelY, itemLabelScale, animatedLabel);
             float countWidth = clippedTextRenderer.getWidth(Integer.toString(count), itemCountScale);
             scope.text(Integer.toString(count), itemRect.right() - 12.0f - countWidth, countY, itemCountScale, animatedCount);
@@ -300,11 +304,14 @@ public class CategoryRailPanel {
     private void buildSettingsItem(PanelUiTree.Scope scope, PanelLayout.Rect menuButton, PanelLayout.Rect settingsRect,
                                    boolean settingsHovered, boolean settingsSelected, float contentProgress, float settingsHover,
                                    float itemIconScale, float itemLabelScale) {
-        Color settingsBg = settingsSelected ? MD3Theme.withAlpha(MD3Theme.SECONDARY_CONTAINER, 0)
-                : (settingsHovered ? MD3Theme.SURFACE_CONTAINER : MD3Theme.withAlpha(MD3Theme.SURFACE_CONTAINER, 0));
-        Color settingsIconColor = settingsSelected ? MD3Theme.ON_SECONDARY_CONTAINER : (settingsHovered ? MD3Theme.TEXT_PRIMARY : MD3Theme.TEXT_SECONDARY);
-        Color settingsLabelColor = settingsSelected ? MD3Theme.ON_SECONDARY_CONTAINER : MD3Theme.TEXT_PRIMARY;
-        scope.roundRect(settingsRect.x(), settingsRect.y(), settingsRect.width(), settingsRect.height(), MD3Theme.CARD_RADIUS, settingsBg);
+        Color settingsBg = settingsSelected ? TenacityTheme.withAlpha(TenacityTheme.SECONDARY_CONTAINER, 0)
+                : (settingsHovered ? TenacityTheme.SURFACE_CONTAINER : TenacityTheme.withAlpha(TenacityTheme.SURFACE_CONTAINER, 0));
+        Color settingsIconColor = settingsSelected ? TenacityTheme.ON_SECONDARY_CONTAINER : (settingsHovered ? TenacityTheme.TEXT_PRIMARY : TenacityTheme.TEXT_SECONDARY);
+        Color settingsLabelColor = settingsSelected ? TenacityTheme.ON_SECONDARY_CONTAINER : TenacityTheme.TEXT_PRIMARY;
+        scope.roundRect(settingsRect.x(), settingsRect.y(), settingsRect.width(), settingsRect.height(), TenacityTheme.CARD_RADIUS, settingsBg);
+        if (settingsSelected) {
+            scope.rect(settingsRect.x() + 1.5f, settingsRect.y() + 3.0f, 2.0f, settingsRect.height() - 6.0f, TenacityTheme.PRIMARY);
+        }
         float settingsIconWidth = clippedTextRenderer.getWidth(SETTINGS_ICON, itemIconScale, StaticFontLoader.ICONS);
         float settingsIconX = getRailIconCenterX(menuButton) - settingsIconWidth / 2.0f;
         float settingsIconHeight = clippedTextRenderer.getHeight(itemIconScale, StaticFontLoader.ICONS);
@@ -312,7 +319,7 @@ public class CategoryRailPanel {
         scope.text(SETTINGS_ICON, settingsIconX, settingsIconY, itemIconScale, settingsIconColor, StaticFontLoader.ICONS);
         if (contentProgress > 0.02f) {
             float textOffset = (1.0f - contentProgress) * 5.0f;
-            Color animatedLabel = MD3Theme.withAlpha(settingsLabelColor, (int) (255 * contentProgress));
+            Color animatedLabel = TenacityTheme.withAlpha(settingsLabelColor, (int) (255 * contentProgress));
             float settingsLabelHeight = clippedTextRenderer.getHeight(itemLabelScale);
             float settingsLabelY = settingsRect.y() + (settingsRect.height() - settingsLabelHeight) / 2.0f - 1.0f;
             scope.text(settingsLabelComponent.getTranslatedName(), settingsRect.x() + 30.0f + textOffset, settingsLabelY, itemLabelScale, animatedLabel);
@@ -341,3 +348,4 @@ public class CategoryRailPanel {
     }
 
 }
+

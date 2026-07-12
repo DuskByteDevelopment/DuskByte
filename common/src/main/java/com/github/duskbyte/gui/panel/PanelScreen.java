@@ -23,11 +23,8 @@ import net.minecraft.client.input.PreeditEvent;
 import net.minecraft.network.chat.Component;
 
 /**
- * 面板 UI 的主屏幕宿主。
- * <p>
- * 它负责维护全局状态、调度各子面板的 extract 阶段、统一 flush renderer，
- * 并将输入事件路由到 rail、模块列表、详情面板、客户端设置面板和弹窗宿主。
- */
+ * 闈㈡澘 UI 鐨勪富灞忓箷瀹夸富銆? * <p>
+ * 瀹冭礋璐ｇ淮鎶ゅ叏灞€鐘舵€併€佽皟搴﹀悇瀛愰潰鏉跨殑 extract 闃舵銆佺粺涓€ flush renderer锛? * 骞跺皢杈撳叆浜嬩欢璺敱鍒?rail銆佹ā鍧楀垪琛ㄣ€佽鎯呴潰鏉裤€佸鎴风璁剧疆闈㈡澘鍜屽脊绐楀涓汇€? */
 public class PanelScreen extends Screen {
 
     public static final PanelScreen INSTANCE = new PanelScreen();
@@ -69,11 +66,9 @@ public class PanelScreen extends Screen {
     }
 
     /**
-     * 提取面板当前帧的渲染状态。
-     * <p>
-     * 该方法会计算布局、推动动画、让各个子面板把 UI 编译进共享批次，
-     * 最后在统一的 render 提交阶段执行 flush。
-     */
+     * 鎻愬彇闈㈡澘褰撳墠甯х殑娓叉煋鐘舵€併€?     * <p>
+     * 璇ユ柟娉曚細璁＄畻甯冨眬銆佹帹鍔ㄥ姩鐢汇€佽鍚勪釜瀛愰潰鏉挎妸 UI 缂栬瘧杩涘叡浜壒娆★紝
+     * 鏈€鍚庡湪缁熶竴鐨?render 鎻愪氦闃舵鎵ц flush銆?     */
     @Override
     public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
 
@@ -130,7 +125,7 @@ public class PanelScreen extends Screen {
             clientSettingPanel.markDirty();
         }
 
-        MD3Theme.syncFromSettings();
+        // Tenacity 主题无需动态同步
         float railWidth = categoryRailPanel.getAnimatedWidth();
         PanelLayout.Layout layout = PanelLayout.compute(width, height, railWidth);
         popupHost.setOverlayBounds(layout.panel());
@@ -163,28 +158,31 @@ public class PanelScreen extends Screen {
     }
 
     private void drawChrome(PanelLayout.Layout layout) {
-        // Full dark overlay with neon border accent
+        // Tenacity 风格：纯暗色背景，无霓虹/扫描线效果
         roundRectRenderer.addRoundRect(0, 0, minecraft.getWindow().getGuiScaledWidth(), minecraft.getWindow().getGuiScaledHeight(), 0,
-                MD3Theme.withAlpha(new Color(0, 0, 0), 140));
+                TenacityTheme.withAlpha(new Color(0, 0, 0), 152));
 
-        // Panel background - full section without shadow
+        // 主面板背景 — 纯色圆角矩形，无辉光
         roundRectRenderer.addRoundRect(layout.panel().x(), layout.panel().y(), layout.panel().width(), layout.panel().height(),
-                MD3Theme.PANEL_RADIUS, MD3Theme.SURFACE);
+                TenacityTheme.PANEL_RADIUS, TenacityTheme.BACKGROUND);
 
-        // Neon top accent line
-        rectRenderer.addRect(layout.panel().x(), layout.panel().y(), layout.panel().width(), 2.0f, MD3Theme.PRIMARY);
+        // 分类侧栏背景
+        roundRectRenderer.addRoundRect(layout.rail().x(), layout.rail().y(), layout.rail().width(), layout.rail().height(),
+                TenacityTheme.CAT_RADIUS, TenacityTheme.CATEGORY_BG);
 
-        // Section backgrounds
-        roundRectRenderer.addRoundRect(layout.rail().x(), layout.rail().y(), layout.rail().width(), layout.rail().height(), MD3Theme.SECTION_RADIUS, MD3Theme.SURFACE_DIM);
         if (state.isClientSettingMode()) {
             float csX = layout.modules().x();
             float csY = layout.modules().y();
             float csW = layout.detail().right() - layout.modules().x();
             float csH = layout.modules().height();
-            roundRectRenderer.addRoundRect(csX, csY, csW, csH, MD3Theme.SECTION_RADIUS, MD3Theme.SURFACE_DIM);
+            roundRectRenderer.addRoundRect(csX, csY, csW, csH, TenacityTheme.CARD_RADIUS, TenacityTheme.CATEGORY_BG);
         } else {
-            roundRectRenderer.addRoundRect(layout.modules().x(), layout.modules().y(), layout.modules().width(), layout.modules().height(), MD3Theme.SECTION_RADIUS, MD3Theme.SURFACE_DIM);
-            roundRectRenderer.addRoundRect(layout.detail().x(), layout.detail().y(), layout.detail().width(), layout.detail().height(), MD3Theme.SECTION_RADIUS, MD3Theme.SURFACE_DIM);
+            // 模块列表背景
+            roundRectRenderer.addRoundRect(layout.modules().x(), layout.modules().y(), layout.modules().width(), layout.modules().height(),
+                    TenacityTheme.CARD_RADIUS, TenacityTheme.CATEGORY_BG);
+            // 详情面板背景
+            roundRectRenderer.addRoundRect(layout.detail().x(), layout.detail().y(), layout.detail().width(), layout.detail().height(),
+                    TenacityTheme.CARD_RADIUS, TenacityTheme.CATEGORY_BG);
         }
     }
 
@@ -317,11 +315,11 @@ public class PanelScreen extends Screen {
     }
 
     /**
-     * 返回当前面板使用的离屏渲染目标。
-     *
-     * @return 当前渲染目标；首次渲染前可能为 {@code null}
+     * 杩斿洖褰撳墠闈㈡澘浣跨敤鐨勭灞忔覆鏌撶洰鏍囥€?     *
+     * @return 褰撳墠娓叉煋鐩爣锛涢娆℃覆鏌撳墠鍙兘涓?{@code null}
      */
     public LuminRenderSystem.LuminRenderTarget getRenderTarget() {
         return renderTarget;
     }
 }
+

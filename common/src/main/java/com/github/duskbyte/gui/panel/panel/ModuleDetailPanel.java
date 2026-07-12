@@ -7,7 +7,7 @@ import com.github.duskbyte.graphics.renderers.RectRenderer;
 import com.github.duskbyte.graphics.renderers.RoundRectRenderer;
 import com.github.duskbyte.graphics.renderers.ShadowRenderer;
 import com.github.duskbyte.graphics.renderers.TextRenderer;
-import com.github.duskbyte.gui.panel.MD3Theme;
+import com.github.duskbyte.gui.panel.TenacityTheme;
 import com.github.duskbyte.gui.panel.PanelLayout;
 import com.github.duskbyte.gui.panel.PanelState;
 import com.github.duskbyte.gui.panel.adapter.SettingListController;
@@ -90,16 +90,16 @@ public class ModuleDetailPanel {
 
         Module module = state.getSelectedModule();
         String detailTitle = module == null ? noModuleComponent.getTranslatedName() : module.getTranslatedName();
-        PanelUiTree headerTree = PanelUiTree.build(scope -> scope.text(detailTitle, bounds.x() + MD3Theme.PANEL_TITLE_INSET, bounds.y() + 10.0f, 0.78f, MD3Theme.TEXT_PRIMARY));
+        PanelUiTree headerTree = PanelUiTree.build(scope -> scope.text(detailTitle, bounds.x() + TenacityTheme.PANEL_TITLE_INSET, bounds.y() + 10.0f, 0.78f, TenacityTheme.TEXT_PRIMARY));
         PanelUiCompiler.render(headerTree, roundRectRenderer, rectRenderer, textRenderer);
 
         if (module == null) {
             return;
         }
 
-        headerBounds = new PanelLayout.Rect(bounds.x() + MD3Theme.PANEL_VIEWPORT_INSET, bounds.y() + 34.0f, bounds.width() - MD3Theme.PANEL_VIEWPORT_INSET * 2.0f, 36.0f);
+        headerBounds = new PanelLayout.Rect(bounds.x() + TenacityTheme.PANEL_VIEWPORT_INSET, bounds.y() + 34.0f, bounds.width() - TenacityTheme.PANEL_VIEWPORT_INSET * 2.0f, 36.0f);
         PanelUiTree controlTree = PanelUiTree.build(scope -> {
-            scope.roundRect(headerBounds.x(), headerBounds.y(), headerBounds.width(), headerBounds.height(), MD3Theme.CARD_RADIUS, MD3Theme.SURFACE_CONTAINER);
+            scope.roundRect(headerBounds.x(), headerBounds.y(), headerBounds.width(), headerBounds.height(), TenacityTheme.CARD_RADIUS, TenacityTheme.SURFACE_CONTAINER);
             buildKeybindControl(scope, module, mouseX, mouseY);
             buildBindModeControl(scope, module, mouseX, mouseY);
             buildHiddenControl(scope, module, mouseX, mouseY);
@@ -108,7 +108,7 @@ public class ModuleDetailPanel {
 
         PanelLayout.Rect viewport = getViewport();
         List<Setting<?>> settings = module.getSettings().stream().filter(Setting::isAvailable).toList();
-        float contentHeight = settings.size() * (28.0f + MD3Theme.ROW_GAP);
+        float contentHeight = settings.size() * (28.0f + TenacityTheme.ROW_GAP);
         state.setMaxDetailScroll(contentHeight - viewport.height());
         float maxDetailScroll = Math.max(0, contentHeight - viewport.height());
         boolean hasScrollBar = maxDetailScroll > 0;
@@ -130,6 +130,12 @@ public class ModuleDetailPanel {
             });
 
             rememberSnapshot(bounds, mouseX, mouseY, module, settings, GuiGraphicsExtractor.guiHeight(), contentSignature);
+        }
+
+        // 清理不再显示的设置的动画缓存，防止内存泄漏
+        if (module != null) {
+            Set<Setting<?>> settingSet = new HashSet<>(settings);
+            hoverAnimations.keySet().retainAll(settingSet);
         }
 
         contentBuffer.queueViewport(viewport, guiHeight, state.getDetailScroll(), maxDetailScroll, contentHeight);
@@ -315,7 +321,7 @@ public class ModuleDetailPanel {
         if (headerBounds == null) {
             return new PanelLayout.Rect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
         }
-        return new PanelLayout.Rect(bounds.x() + MD3Theme.PANEL_VIEWPORT_INSET, headerBounds.bottom() + 6.0f, bounds.width() - MD3Theme.PANEL_VIEWPORT_INSET * 2.0f, bounds.bottom() - headerBounds.bottom() - 10.0f);
+        return new PanelLayout.Rect(bounds.x() + TenacityTheme.PANEL_VIEWPORT_INSET, headerBounds.bottom() + 6.0f, bounds.width() - TenacityTheme.PANEL_VIEWPORT_INSET * 2.0f, bounds.bottom() - headerBounds.bottom() - 10.0f);
     }
 
     private PanelLayout.Rect getBindModeBounds() {
@@ -339,7 +345,7 @@ public class ModuleDetailPanel {
     }
 
     private float getHeaderContentInset() {
-        return MD3Theme.PANEL_TITLE_INSET + 2.0f;
+        return TenacityTheme.PANEL_TITLE_INSET + 2.0f;
     }
 
     private float getHeaderContentInsetX() {
@@ -347,7 +353,7 @@ public class ModuleDetailPanel {
     }
 
     private float getHeaderControlHeight() {
-        return MD3Theme.CONTROL_HEIGHT;
+        return TenacityTheme.CONTROL_HEIGHT;
     }
 
     private float getKeybindControlSize() {
@@ -363,7 +369,7 @@ public class ModuleDetailPanel {
     }
 
     private PanelLayout.Rect getHiddenBounds() {
-        return new PanelLayout.Rect(getHeaderControlGroupRightX() + getKeybindControlSize() + getHeaderControlGap() + getBindModeControlWidth() + getHeaderControlGap(), getHeaderControlsY(), getHiddenControlWidth(), getHeaderControlHeight());
+        return new PanelLayout.Rect(getHeaderControlGroupLeftX() + getKeybindControlSize() + getHeaderControlGap() + getBindModeControlWidth() + getHeaderControlGap(), getHeaderControlsY(), getHiddenControlWidth(), getHeaderControlHeight());
     }
 
     private float getHeaderControlGap() {
@@ -371,7 +377,7 @@ public class ModuleDetailPanel {
     }
 
     private float getHeaderControlRadius() {
-        return MD3Theme.CONTROL_RADIUS;
+        return TenacityTheme.CONTROL_RADIUS;
     }
 
     private float getKeybindControlRadius() {
@@ -399,15 +405,15 @@ public class ModuleDetailPanel {
         float radius = getKeybindControlRadius();
         float haloInset = 1.5f * focusProgress;
         if (haloInset > 0.01f) {
-            scope.roundRect(keybindBounds.x() - haloInset, keybindBounds.y() - haloInset, keybindBounds.width() + haloInset * 2.0f, keybindBounds.height() + haloInset * 2.0f, radius + haloInset, MD3Theme.withAlpha(MD3Theme.PRIMARY, (int) (28 * focusProgress)));
+            scope.roundRect(keybindBounds.x() - haloInset, keybindBounds.y() - haloInset, keybindBounds.width() + haloInset * 2.0f, keybindBounds.height() + haloInset * 2.0f, radius + haloInset, TenacityTheme.withAlpha(TenacityTheme.PRIMARY, (int) (28 * focusProgress)));
         }
 
-        Color background = MD3Theme.lerp(MD3Theme.SECONDARY_CONTAINER, MD3Theme.PRIMARY_CONTAINER, focusProgress);
-        Color foreground = MD3Theme.lerp(MD3Theme.ON_SECONDARY_CONTAINER, MD3Theme.ON_PRIMARY_CONTAINER, focusProgress);
+        Color background = TenacityTheme.lerp(TenacityTheme.SECONDARY_CONTAINER, TenacityTheme.PRIMARY_CONTAINER, focusProgress);
+        Color foreground = TenacityTheme.lerp(TenacityTheme.ON_SECONDARY_CONTAINER, TenacityTheme.ON_PRIMARY_CONTAINER, focusProgress);
         scope.roundRect(keybindBounds.x(), keybindBounds.y(), keybindBounds.width(), keybindBounds.height(), radius, background);
         if (hoverProgress > 0.01f) {
             scope.roundRect(keybindBounds.x(), keybindBounds.y(), keybindBounds.width(), keybindBounds.height(), radius,
-                    MD3Theme.stateLayer(foreground, hoverProgress, listening ? 18 : 12));
+                    TenacityTheme.stateLayer(foreground, hoverProgress, listening ? 18 : 12));
         }
 
         String label = listening ? "..." : formatCompactKeybind(module.getKeyBind());
@@ -527,3 +533,4 @@ public class ModuleDetailPanel {
     }
 
 }
+

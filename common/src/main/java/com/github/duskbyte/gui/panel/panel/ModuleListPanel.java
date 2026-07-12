@@ -7,7 +7,7 @@ import com.github.duskbyte.graphics.renderers.RectRenderer;
 import com.github.duskbyte.graphics.renderers.RoundRectRenderer;
 import com.github.duskbyte.graphics.renderers.ShadowRenderer;
 import com.github.duskbyte.graphics.renderers.TextRenderer;
-import com.github.duskbyte.gui.panel.CyberpunkTheme;
+import com.github.duskbyte.gui.panel.TenacityTheme;
 import com.github.duskbyte.gui.panel.PanelLayout;
 import com.github.duskbyte.gui.panel.PanelState;
 import com.github.duskbyte.gui.panel.adapter.ModuleViewModel;
@@ -81,7 +81,7 @@ public class ModuleListPanel {
 
         PanelLayout.Rect viewport = getViewport();
         List<Module> modules = state.getVisibleModules();
-        float contentHeight = modules.size() * (ModuleRow.HEIGHT + CyberpunkTheme.ROW_GAP);
+        float contentHeight = modules.size() * (ModuleRow.HEIGHT + TenacityTheme.ROW_GAP);
         state.setMaxModuleScroll(contentHeight - viewport.height());
         float maxModuleScroll = Math.max(0, contentHeight - viewport.height());
         boolean hasScrollBar = maxModuleScroll > 0;
@@ -96,8 +96,8 @@ public class ModuleListPanel {
         }
 
         PanelUiTree tree = PanelUiTree.build(scope -> {
-            scope.text(state.getSelectedCategory().getName(), bounds.x() + CyberpunkTheme.PANEL_TITLE_INSET, bounds.y() + 10.0f, 0.78f, CyberpunkTheme.TEXT_PRIMARY);
-            scope.text(modulesComponent.getTranslatedName(), bounds.x() + CyberpunkTheme.PANEL_TITLE_INSET, bounds.y() + 21.0f, 0.56f, CyberpunkTheme.TEXT_SECONDARY);
+            scope.text(state.getSelectedCategory().getName(), bounds.x() + TenacityTheme.PANEL_TITLE_INSET, bounds.y() + 10.0f, 0.78f, TenacityTheme.TEXT_PRIMARY);
+            scope.text(modulesComponent.getTranslatedName(), bounds.x() + TenacityTheme.PANEL_TITLE_INSET, bounds.y() + 21.0f, 0.56f, TenacityTheme.TEXT_SECONDARY);
             buildSearchField(scope, mouseX, mouseY);
             scope.viewport(contentBuffer, viewport, guiHeight, state.getModuleScroll(), maxModuleScroll, contentHeight, content -> {
                 if (!rebuildContent) {
@@ -122,7 +122,7 @@ public class ModuleListPanel {
                             || !toggleHoverAnimation.isFinished()
                             || marqueeActive);
                     row.buildUi(content, textRenderer, hoverAnimation.getValue(), selectionAnimation.getValue(), toggleAnimation.getValue(), toggleHoverAnimation.getValue());
-                    y += ModuleRow.HEIGHT + CyberpunkTheme.ROW_GAP;
+                    y += ModuleRow.HEIGHT + TenacityTheme.ROW_GAP;
                 }
             });
         });
@@ -358,11 +358,11 @@ public class ModuleListPanel {
     }
 
     private PanelLayout.Rect getViewport() {
-        return new PanelLayout.Rect(bounds.x() + CyberpunkTheme.PANEL_VIEWPORT_INSET, bounds.y() + 34.0f, bounds.width() - CyberpunkTheme.PANEL_VIEWPORT_INSET * 2.0f, bounds.height() - 40.0f);
+        return new PanelLayout.Rect(bounds.x() + TenacityTheme.PANEL_VIEWPORT_INSET, bounds.y() + 34.0f, bounds.width() - TenacityTheme.PANEL_VIEWPORT_INSET * 2.0f, bounds.height() - 40.0f);
     }
 
     private PanelLayout.Rect getSearchBounds() {
-        return new PanelLayout.Rect(bounds.right() - CyberpunkTheme.PANEL_TITLE_INSET - 76.0f, bounds.y() + 8.0f, 76.0f, 18.0f);
+        return new PanelLayout.Rect(bounds.right() - TenacityTheme.PANEL_TITLE_INSET - 76.0f, bounds.y() + 8.0f, 76.0f, 18.0f);
     }
 
     private void buildSearchField(PanelUiTree.Scope scope, int mouseX, int mouseY) {
@@ -376,11 +376,11 @@ public class ModuleListPanel {
         String display = showPlaceholder ? searchComponent.getTranslatedName() : query;
         float scale = 0.52f;
         Color textColor = showPlaceholder
-                ? CyberpunkTheme.lerp(CyberpunkTheme.TEXT_MUTED, CyberpunkTheme.filledFieldContent(searchFocused), focusProgress)
-                : CyberpunkTheme.filledFieldContent(searchFocused);
+                ? TenacityTheme.lerp(TenacityTheme.TEXT_MUTED, TenacityTheme.filledFieldContent(searchFocused), focusProgress)
+                : TenacityTheme.filledFieldContent(searchFocused);
         scope.input(searchBounds, searchFocused, fieldHover,
                 8.0f, display, scale, textColor,
-                searchFocused ? searchCursorIndex : null, searchFocused ? CyberpunkTheme.filledFieldCaret(true) : null,
+                searchFocused ? searchCursorIndex : null, searchFocused ? TenacityTheme.filledFieldCaret(true) : null,
                 null, 0.0f, null);
 
         // Clear search button (X) when query is not empty
@@ -389,7 +389,7 @@ public class ModuleListPanel {
             float clearX = searchBounds.right() - clearSize - 4.0f;
             float clearY = searchBounds.y() + (searchBounds.height() - clearSize) / 2.0f;
             boolean clearHovered = mouseX >= clearX && mouseX <= clearX + clearSize && mouseY >= clearY && mouseY <= clearY + clearSize;
-            Color clearColor = clearHovered ? CyberpunkTheme.TEXT_PRIMARY : CyberpunkTheme.TEXT_MUTED;
+            Color clearColor = clearHovered ? TenacityTheme.TEXT_PRIMARY : TenacityTheme.TEXT_MUTED;
             scope.text("✕", clearX, clearY, 0.5f, clearColor);
         }
 
